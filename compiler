@@ -1,0 +1,60 @@
+class RecursComp
+  def compile(str)
+    @str,@index = str,0
+    compileF
+  end
+  
+  private
+
+  def compileF
+    compileT
+    return if @index >= @str.length
+    cur = @str[@index].chr
+    if cur == '+' or cur == '-'
+      @index += 1
+      compileF
+      print "#{cur} "
+    end
+  end
+  def compileT
+    compileM
+    return if @index >= @str.length
+    cur = @str[@index].chr
+    if cur == '*' or cur == '/' or cur == '%'
+      @index += 1
+      compileT
+      print "#{cur} "
+    end
+  end
+  def compileM
+    if @str[@index].chr == '('  or @str[@index].chr == '[' or @str[@index].chr == '{'
+      @index += 1
+      compileF
+      @index += 1
+    else
+      compileV
+    end
+  end
+  def compileV
+    print "#{@str[@index].chr} "
+    @index += 1
+  end
+end
+
+c = RecursComp.new
+while true
+  print "Введите формулу: "
+  string = readline.chomp.tr(' ', '')
+
+  if (string.include? "/*") && (string.include? "*/")
+    if (string.index("/*") < string.index("*/"))
+      string = string[0,string.index("/*")] + string[string.index("*/")+2,string.length-1]
+    end
+  end
+
+  if string.include? "//"
+    s = s[0,s.index("//")]
+  end
+
+  c.compile(s)
+  print "\n
